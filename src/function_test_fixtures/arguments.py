@@ -10,9 +10,11 @@ class ArgumentBase(abc.ABC):
     TOKEN: ClassVar[str]
 
     def is_positional(self: Self) -> bool:
+        """Returns True if the argument is a positional argument."""
         return False
 
     def __str__(self: Self) -> str:
+        """Return a string represtion of the argument."""
         return self.__repr__()
 
 
@@ -23,6 +25,7 @@ class MappedArgPlaceholder(ArgumentBase, abc.ABC):
     n: int
 
     def __repr__(self : Self) -> str:
+        """Return a string represtion of the argument."""
         if self.is_positional():
             return f'{self.TOKEN}{self.n}'
         else:
@@ -51,9 +54,11 @@ class UnmappedArgPlaceholder(ArgumentBase):
             return f'{self.TOKEN}=X'
 
     def __hash__(self: Self) -> int:
+        """Returns hash of the unmapped argument class."""
         return self._n
 
     def __eq__(self: Self, other: object, /) -> bool:
+        """Returns False as Unmapped arguments are never equal to any other object."""
         return False
 
 
@@ -143,7 +148,7 @@ class TestCaseContainer:
         n = len(self.keyword_arguments)
         return random.sample(self.keyword_arguments, k=n)
 
-    def __iter__(self: Self) -> Iterator[ArgumentBase]:
+    def  (self: Self) -> Iterator[ArgumentBase]:
         def f() -> Iterator[ArgumentBase]:
             for x in self.positional_arguments:
                 yield x
@@ -155,4 +160,5 @@ class TestCaseContainer:
         return f()
 
     def __len__(self: Self) -> int:
+        """Return number of both positional and keyword arguments in signature."""
         return len(self.positional_arguments) + len(self.keyword_arguments)
