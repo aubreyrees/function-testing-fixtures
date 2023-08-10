@@ -1,10 +1,10 @@
 import abc
 import dataclasses
 import random
-from typing import Self, ClassVar, TypeAlias, Iterator, Iterable
+from typing import Self, ClassVar, Iterator, Iterable
 
 
-class ArgPlaceholderBase(abc.ABC):
+class ArgumentBase(abc.ABC):
     """Base class for argument placeholders."""
 
     TOKEN: ClassVar[str]
@@ -16,11 +16,8 @@ class ArgPlaceholderBase(abc.ABC):
         return self.__repr__()
 
 
-T: TypeAlias = ArgPlaceholderBase
-
-
 @dataclasses.dataclass(frozen=True, init=True, eq=True, repr=False)
-class MappedArgPlaceholder(ArgPlaceholderBase, abc.ABC):
+class MappedArgPlaceholder(ArgumentBase, abc.ABC):
     """Base class for arguments that correspond to a parameter."""
 
     n: int
@@ -32,7 +29,7 @@ class MappedArgPlaceholder(ArgPlaceholderBase, abc.ABC):
             return f'{self.TOKEN}{self.n}=X'
 
 
-class UnmappedArgPlaceholder(ArgPlaceholderBase):
+class UnmappedArgPlaceholder(ArgumentBase):
     """
     Base class for "extra" arguments.
 
@@ -116,13 +113,13 @@ class TestKeywordExtra(UnmappedArgPlaceholder):
 
 @dataclasses.dataclass(frozen=True, init=True, eq=True, repr=False)
 class TestCaseContainer:
-    positional_arguments: tuple[T,...]
-    keyword_arguments: tuple[T,...]
+    positional_arguments: tuple[ArgumentBase,...]
+    keyword_arguments: tuple[ArgumentBase,...]
 
     @classmethod
-    def auto(cls, *xs: Iterable[T]) -> Self:
-        positional_shunt: list[T] = []
-        keyword_shunt: set[T] = set()
+    def auto(cls, *xs: Iterable[ArgumentBase]) -> Self:
+        positional_shunt: list[ArgumentBase] = []
+        keyword_shunt: set[ArgumentBase] = set()
         for x in xs:
             for ta in x:
                 if ta.is_positional():
@@ -142,12 +139,12 @@ class TestCaseContainer:
             keyword_arguments=tuple()
         )
 
-    def shuffled_keyword_arguments(self: Self) -> list[T]:
+    def shuffled_keyword_arguments(self: Self) -> list[ArgumentBase]:
         n = len(self.keyword_arguments)
         return random.sample(self.keyword_arguments, k=n)
 
-    def __iter__(self: Self) -> Iterator[T]:
-        def f() -> Iterator[T]:
+    def __iter__(self: Self) -> Iterator[ArgumentBase]:
+        def f() -> Iterator[ArgumentBase]:
             for x in self.positional_arguments:
                 yield x
 

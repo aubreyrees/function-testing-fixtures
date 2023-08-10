@@ -14,7 +14,7 @@ from .constants_and_types import (
     VAR_POSITIONAL
 )
 from .arguments import (
-    T,
+    ArgumentBase,
     TestPositional,
     TestKeyword,
     TestPositionalOrKeyword,
@@ -88,7 +88,7 @@ class ParameterStats:
         self.uses_keyword_only = self.counters[KEYWORD_ONLY] > 0
         self.uses_keyword_or_positional = self.counters[POSITIONAL_OR_KEYWORD] > 0
 
-    def test_keyword_gen(self: Self, ko : int, /) -> Iterator[T]:
+    def test_keyword_gen(self: Self, ko : int, /) -> Iterator[ArgumentBase]:
         assert 0 <= ko <= self.counters[KEYWORD_ONLY]
 
         if ko > 0:
@@ -115,7 +115,7 @@ class ParameterStats:
         *,
         as_pos : int,
         as_kw : int
-    ) -> Iterator[T]:
+    ) -> Iterator[ArgumentBase]:
 
         assert (
             0 <= as_pos
@@ -148,16 +148,16 @@ class ParameterStats:
 
             yield from (TestPositionalOrKeyword(n+1, True) for n in seq)
 
-    def test_positional_gen(self: Self, po : int, /) -> Iterator[T]:
+    def test_positional_gen(self: Self, po : int, /) -> Iterator[ArgumentBase]:
         assert 0 <= po <= self.counters[POSITIONAL_ONLY]
 
         if po > 0:
             yield from (TestPositional(n + 1) for n in range(po))
 
-    def test_positional_extra_gen(self: Self, n : int, /) -> Iterator[T]:
+    def test_positional_extra_gen(self: Self, n : int, /) -> Iterator[ArgumentBase]:
         yield from (TestPositionalExtra() for _ in range(n))
 
-    def test_keyword_extra_gen(self: Self, n : int, /) -> Iterator[T]:
+    def test_keyword_extra_gen(self: Self, n : int, /) -> Iterator[ArgumentBase]:
         yield from (TestKeywordExtra() for _ in range(n))
 
     def test_positional_or_keyword_random_sample(
@@ -168,7 +168,7 @@ class ParameterStats:
         *,
         low : int = 0,
         high : int | None = None
-    ) -> Iterator[T]:
+    ) -> Iterator[ArgumentBase]:
 
         if high is None:
             high = self.counters[POSITIONAL_OR_KEYWORD]
