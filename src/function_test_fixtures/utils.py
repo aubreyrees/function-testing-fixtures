@@ -42,12 +42,13 @@ def split_int(n: int, /, *, x: int | None=None) -> frozenset[tuple[int,int]]:
 
 def test_low_range(n: int, m: int | None = None) -> tuple[int,...]:
     """Equivlent to test_range(start, stop)[:-1] except start == stop is an error."""
+    start: int
+    stop: int
+
     if m is None:
-        start: int = 0
-        stop: int = n
+        start, stop = 0, n
     else:
-        start: int = n
-        stop: int = m
+        start, stop = n, m
 
     match stop - start:
         case 0 :
@@ -62,12 +63,13 @@ def test_low_range(n: int, m: int | None = None) -> tuple[int,...]:
 
 def test_high_range(n: int, m: int | None = None) -> tuple[int,...]:
     """Equivlent to test_range(start, stop)[1:] except start == stop is an error."""
+    start: int
+    stop: int
+
     if m is None:
-        start: int = 0
-        stop: int = n
+        start, stop = 0, n
     else:
-        start: int = n
-        stop: int = m
+        start, stop = n, m
 
     match stop - start:
         case 0 :
@@ -87,12 +89,13 @@ def test_range(n: int, m: int | None=None, /) -> tuple[int, ...]:
     This includes `start`, `stop` and if the the `stop - start > 1`
     a third random int betwen start and stop.
     """
+    start: int
+    stop: int
+
     if m is None:
-        start: int = 0
-        stop: int = n
+        start, stop = 0, n
     else:
-        start: int = n
-        stop: int = m
+        start, stop = n, m
 
     match stop - start:
         case 0:
