@@ -16,7 +16,7 @@ def copy_seq_generator(seq: Iterable[S]) -> Iterator[S]:
     yield from (copy.copy(x) for x in seq)
 
 
-def split_distribution(n: int, /, *, x: int | None=None) -> tuple[tuple[int,int], ...]:
+def split_int(n: int, /, *, x: int | None=None) -> frozenset[tuple[int,int]]:
     """
     Return 2-tuples where the sum of the tuple's members is 2.
 
@@ -33,11 +33,11 @@ def split_distribution(n: int, /, *, x: int | None=None) -> tuple[tuple[int,int]
         elif x <= 0 or x >= n:
             raise TypeError("`x` must be in range 1..n-1")
 
-        return ((n, 0), (x, n - x), (0, n))
+        return frozenset({(n, 0), (x, n - x), (0, n)})
     elif n == 1:
-        return ((1, 0), (0, 1))
+        return frozenset({(1, 0), (0, 1)})
     else:
-        return ((0, 0),)
+        return frozenset({(0, 0)})
 
 
 def test_low_range(n: int, m: int | None = None) -> tuple[int,...]:
@@ -57,7 +57,7 @@ def test_low_range(n: int, m: int | None = None) -> tuple[int,...]:
         case 2:
             return (start, start+1)
         case _:
-            return (start, random.randrange(1, stop))
+            return (start, random.randrange(start+1, stop))
 
 
 def test_high_range(n: int, m: int | None = None) -> tuple[int,...]:
@@ -77,7 +77,7 @@ def test_high_range(n: int, m: int | None = None) -> tuple[int,...]:
         case 2:
             return (stop-1, stop)
         case _:
-            return (random.randrange(start, stop), stop)
+            return (random.randrange(start+1, stop), stop)
 
 
 def test_range(n: int, m: int | None=None, /) -> tuple[int, ...]:
