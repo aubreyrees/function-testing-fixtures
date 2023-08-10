@@ -23,12 +23,8 @@ KEYWORD_ONLY = ParameterKind.KEYWORD_ONLY
 VAR_KEYWORD = ParameterKind.VAR_KEYWORD
 
 
-ParameterCounts: TypeAlias = dict[ParameterKind, tuple[int, ...]]
-
-
 NON_VAR_PARAM_TYPES : set[ParameterKind] = {
     ParameterKind.POSITIONAL_ONLY,
     ParameterKind.POSITIONAL_OR_KEYWORD,
     ParameterKind.KEYWORD_ONLY
-
 }

@@ -4,9 +4,6 @@ import random
 import copy
 from typing import Iterator, TypeVar, Iterable
 
-from .constants_and_types import ParameterCounts, NON_VAR_PARAM_TYPES
-from .parameter_stats import ParameterStats
-
 
 S = TypeVar('S')
 
@@ -108,11 +105,3 @@ def test_range(n: int, m: int | None=None, /) -> tuple[int, ...]:
             return (start, start+1, stop)
         case _:
             return (start, random.randrange(start + 1, stop), stop)
-
-
-def build_parameter_counts(stats: ParameterStats) -> ParameterCounts:
-    """Produce a `test_range` for each parameter type."""
-    return {
-        pt: test_range(stats.required_counters[pt], stats.counters[pt])
-        for pt in NON_VAR_PARAM_TYPES
-    }
