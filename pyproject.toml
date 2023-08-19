@@ -1,5 +1,5 @@
 [project]
-name = "function_testing_fixtures"
+name = "function_test_fixtures"
 version = "0.1"
 description = "Functions for generating fixtures for testing functions"
 authors = [
@@ -44,7 +44,7 @@ max-complexity = 10
 
 [tool.coverage.run]
 branch = true
-source = ["api_mimic"]
+source = ["function_testing_fixtures"]
 
 
 [tool.setuptools]
